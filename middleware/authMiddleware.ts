@@ -20,6 +20,7 @@ export const checkToken = async (req:Request, res:Response, next: NextFunction) 
         }
         
         req.body.role = payload.role;
+        req.body.user = user;
         
         next();
     } catch (error: any) {

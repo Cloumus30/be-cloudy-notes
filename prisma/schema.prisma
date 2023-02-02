@@ -21,10 +21,14 @@ model Role {
 
 model User {
   id    Int     @default(autoincrement()) @id
-  email String @unique 
-  password String 
-  email_verified_at String?
-  role_code String
+  first_name String @db.VarChar(255)
+  last_name String @db.VarChar(255)
+  gender String? @db.VarChar(255)
+  birth_date DateTime? @db.Date
+  email String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+  email_verified_at String? @db.VarChar(255)
+  role_code String @db.VarChar(255)
   is_google Boolean? @default(false)
   role Role @relation(fields: [role_code], references: [code])
   notes Notes[]
@@ -35,7 +39,8 @@ model User {
 model Notes {
   id        Int     @default(autoincrement()) @id
   user_id Int 
-  title String 
+  title String @db.VarChar(255)
+  short_desc String? @db.VarChar(255) 
   content String? @db.Text
   user User @relation(fields: [user_id], references: [id])
   note_images NoteImages[]
@@ -46,9 +51,9 @@ model Notes {
 model NoteImages{
   id Int @default(autoincrement()) @id
   note_id Int
-  path String
+  path String @db.VarChar(255)
   size Int
-  mime_type String
+  mime_type String @db.VarChar(255)
   note Notes? @relation(fields: [note_id], references: [id], onDelete: Cascade)
 
   @@map("note_images")

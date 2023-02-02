@@ -66,6 +66,10 @@ class AuthRepository{
             const salt = await bcrypt.genSalt(8);
             const hashedPassword = await bcrypt.hash(request.password, salt);
             const dataUser: Omit<User, 'id'> = {
+                first_name: request.first_name,
+                last_name: request.last_name,
+                gender: request.gender,
+                birth_date: new Date(request.birth_date),
                 email: request.email,
                 password: hashedPassword,
                 email_verified_at: null,

@@ -13,6 +13,7 @@ class UserRepository{
                 id
             },
             select:{
+                id:true,
                 email: true,
             }
         });

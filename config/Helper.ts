@@ -11,3 +11,10 @@ export const paginate = (query:any)=>{
         perPage,
     }
 }
+
+export const exclude = (model:any, keys:string[]) =>{
+    for (let key of keys) {
+        delete model[key];
+    }
+    return model;
+}

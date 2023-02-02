@@ -5,6 +5,10 @@ const salt = bcrypt.genSaltSync(8);
 
 const users: Omit<User,'id'>[] = [
     {
+        first_name:'admin',
+        last_name:'adm',
+        gender:'laki-laki',
+        birth_date: new Date('1998-12-30'),
         email:'admin@admin.com',
         password: bcrypt.hashSync('superadmin123'),
         email_verified_at: null,

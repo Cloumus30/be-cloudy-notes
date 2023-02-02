@@ -5,11 +5,11 @@ import { checkToken } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
-router.use(checkToken);
-
 router.post('/register',
     body('email').isEmail(),
     body('password').isString(),
+    body('first_name').isString(),
+    body('last_name').isString(),
     register);
 
 router.post('/login',

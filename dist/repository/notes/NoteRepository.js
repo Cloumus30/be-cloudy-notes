@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
-const prisma_pagination_1 = require("prisma-pagination");
 class NoteRepository {
     constructor() {
         this.prisma = new client_1.PrismaClient();
@@ -18,7 +17,6 @@ class NoteRepository {
     list_notes(request) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const paginate = (0, prisma_pagination_1.createPaginator)({ perPage: 1 });
                 const res = yield request.body.paginate(this.prisma.notes, { orderBy: { id: 'desc' } });
                 return {
                     error: false,
