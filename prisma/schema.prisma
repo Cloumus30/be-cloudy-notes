@@ -14,6 +14,8 @@ model Role {
   id Int @default(autoincrement()) @id
   name String
   code String @unique
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
   users User[]
 
   @@map("roles")
@@ -30,6 +32,8 @@ model User {
   email_verified_at String? @db.VarChar(255)
   role_code String @db.VarChar(255)
   is_google Boolean? @default(false)
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
   role Role @relation(fields: [role_code], references: [code])
   notes Notes[]
 
@@ -43,6 +47,8 @@ model Notes {
   short_desc String? @db.VarChar(255) 
   content String? @db.Text
   user User @relation(fields: [user_id], references: [id])
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
   note_images NoteImages[]
 
   @@map("notes")
@@ -54,6 +60,8 @@ model NoteImages{
   path String @db.VarChar(255)
   size Int
   mime_type String @db.VarChar(255)
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
   note Notes? @relation(fields: [note_id], references: [id], onDelete: Cascade)
 
   @@map("note_images")

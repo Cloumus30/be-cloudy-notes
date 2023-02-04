@@ -42,6 +42,41 @@ class NoteRepository{
         }
     }
 
+    public async detail_notes(id:number){
+        try {
+            const note = await this.prisma.notes.findFirst({
+                where: {
+                    id
+                },
+                include:{
+                    user: true,
+                }
+            });
+            let res = null;
+            if(note){
+                res = {
+                    id: note.id,
+                    title: note.title,
+                    short_desc: note.short_desc,
+                    content: note.content,
+                    user_id: note.user_id,
+                    user_full_name: `${note.user.first_name} ${note.user.last_name}`,
+                    created_at : note.created_at,
+                };
+            }
+            return {
+                error:false,
+                message: ` success Get`,
+                data:res
+            }
+        } catch (error:any) {
+            return {
+                error:true,
+                message: ` ⚠️ ${error.message}`,
+            }
+        }
+    }
+
     public async store_note(body: any){
         try {
             const user = body.user;
@@ -49,6 +84,7 @@ class NoteRepository{
             const data_note = {
                 user_id: user.id,
                 title: body.title,
+                short_desc: body.short_desc || null,
                 content: body.content || null,
             }
 

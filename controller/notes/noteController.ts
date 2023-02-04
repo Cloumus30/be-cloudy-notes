@@ -15,6 +15,18 @@ export const listNote = async (req:Request, res:Response)=>{
     }
 }
 
+export const detailNote = async (req:Request, res:Response) => {
+    const id = parseInt(req.params.id);
+    const data = await noteRepository.detail_notes(id);
+
+    if(data.error){
+        console.error(data.message);
+        res.status(400).json(data)
+    }else{
+        res.status(200).json(data)
+    }
+}
+
 export const storeNote = async (req: Request, res: Response) =>{
     const body = req.body;
     const data = await noteRepository.store_note(body);

@@ -1,7 +1,8 @@
-import { PrismaClient, User } from "@prisma/client";
+import { Prisma, PrismaClient, User } from "@prisma/client";
 import bcrypt from 'bcryptjs';
 import RoleConst from "../const/roleConst";
 import jwt from 'jsonwebtoken';
+import { UserCreateUpdate, UserGet, excludePass } from "../prisma/dto/user.dto";
 
 class AuthRepository{
     protected prisma : PrismaClient;
@@ -65,7 +66,7 @@ class AuthRepository{
         try {
             const salt = await bcrypt.genSalt(8);
             const hashedPassword = await bcrypt.hash(request.password, salt);
-            const dataUser: Omit<User, 'id'> = {
+            const dataUser: UserCreateUpdate = {
                 first_name: request.first_name,
                 last_name: request.last_name,
                 gender: request.gender,
@@ -78,18 +79,22 @@ class AuthRepository{
             };
             const user= await this.prisma.user.create({
                 data: dataUser,
-                select:{
-                    email:true,
-                    role:true,
-                    password:false,
-                }
             })
+            const userNoPass: UserGet = excludePass(user,['password']);
             return {
                 error:false,
                 message: 'Success Register',
-                data: user
+                data: userNoPass
             }
         } catch (error: any) {
+            if(error instanceof Prisma.PrismaClientKnownRequestError){
+                if(error.code === 'p2002'){
+                    return {
+                        error:true,
+                        message: ` ⚠️ Email Already Exists`,
+                    }        
+                }
+            }
             return {
                 error:true,
                 message: ` ⚠️ ${error.message}`,
