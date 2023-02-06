@@ -10,6 +10,10 @@
     "dev": "concurrently --handle-input \"npx tsc --watch\" \"npx nodemon dist/index.js\"",
     "dev-ts": "npx ts-node-dev --respawn --exit-child index.ts"
   },
+  "engines": {
+    "node": ">=16.17.0",
+    "npm": ">=8.15.0"
+  },
   "prisma": {
     "seed": "ts-node seeder/seed.ts"
   },
