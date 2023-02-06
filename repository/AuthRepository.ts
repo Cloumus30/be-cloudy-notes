@@ -2,7 +2,8 @@ import { Prisma, PrismaClient, User } from "@prisma/client";
 import bcrypt from 'bcryptjs';
 import RoleConst from "../const/roleConst";
 import jwt from 'jsonwebtoken';
-import { UserCreateUpdate, UserGet, excludePass } from "../prisma/dto/user.dto";
+import { UserCreateUpdate, UserGet, excludeUser } from "../prisma/dto/user.dto";
+import { failedRepo, successLogin, successSaveRepo } from "../config/response";
 
 class AuthRepository{
     protected prisma : PrismaClient;
@@ -22,10 +23,7 @@ class AuthRepository{
                 }
             });
             if (!user){
-                return {
-                    error:true,
-                    message: 'User Not Found',
-                }
+                return failedRepo('User Not Found')
             }
     
             const authenticated = await bcrypt.compare(request.password, user.password);
@@ -43,22 +41,12 @@ class AuthRepository{
                     },
                     role: user.role,
                 }
-                return {
-                    error:false,
-                    message: 'success Login',
-                    data: resp,
-                }
+                return successLogin(resp);
             }
     
-            return {
-                error:true,
-                message: 'User Or password incorrect',
-            }    
+            return failedRepo('User or Password incorrect');
         } catch (error:any) {
-            return {
-                error:true,
-                message: ` ⚠️ ${error.message}`,
-            }
+            return failedRepo(error.message)
         }
         
     }
@@ -80,25 +68,15 @@ class AuthRepository{
             const user= await this.prisma.user.create({
                 data: dataUser,
             })
-            const userNoPass: UserGet = excludePass(user,['password']);
-            return {
-                error:false,
-                message: 'Success Register',
-                data: userNoPass
-            }
+            const userNoPass: UserGet = excludeUser(user,['password']);
+            return successSaveRepo(userNoPass)
         } catch (error: any) {
             if(error instanceof Prisma.PrismaClientKnownRequestError){
                 if(error.code === 'p2002'){
-                    return {
-                        error:true,
-                        message: ` ⚠️ Email Already Exists`,
-                    }        
+                    return failedRepo('Email Already Exists') 
                 }
             }
-            return {
-                error:true,
-                message: ` ⚠️ ${error.message}`,
-            }
+            return failedRepo(error.message)
         }
     }
 }

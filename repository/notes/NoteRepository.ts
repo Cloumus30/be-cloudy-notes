@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Request } from "express";
-import { exclude } from "../../config/Helper";
+import { noteCreate, noteUpdate} from "../../prisma/dto/note.dto";
+import { failedRepo, successGetRepo, successSaveRepo, successUpdateRepo } from "../../config/response";
 
 
 class NoteRepository{
@@ -29,16 +30,9 @@ class NoteRepository{
             };
              const res = await request.body.paginate(this.prisma.notes, query);
              
-            return {
-                error:false,
-                message: ` success Get`,
-                data:res
-            }
+            return successGetRepo(res)
         } catch (error:any) {
-            return {
-                error:true,
-                message: ` ⚠️ ${error.message}`,
-            }
+            return failedRepo(error.message)
         }
     }
 
@@ -64,16 +58,9 @@ class NoteRepository{
                     created_at : note.created_at,
                 };
             }
-            return {
-                error:false,
-                message: ` success Get`,
-                data:res
-            }
+            return successGetRepo(res)
         } catch (error:any) {
-            return {
-                error:true,
-                message: ` ⚠️ ${error.message}`,
-            }
+            return failedRepo(error.message)
         }
     }
 
@@ -81,7 +68,7 @@ class NoteRepository{
         try {
             const user = body.user;
 
-            const data_note = {
+            const data_note: noteCreate = {
                 user_id: user.id,
                 title: body.title,
                 short_desc: body.short_desc || null,
@@ -92,15 +79,34 @@ class NoteRepository{
                 data: data_note,
             });
 
-            return {
-                error:false,
-                message: ` success Store Data`,
-            }
+            return successSaveRepo(res)
         } catch (error:any) {
             return {
                 error:true,
                 message: ` ⚠️ ${error.message}`,
             }
+        }
+    }
+
+    public async update_note(id:number, body: any){
+        try {
+            const user = body.user;
+
+            const data_note:noteUpdate = {
+                title: body.title,
+                short_desc: body.title,
+                content: body.title,
+            }
+    
+            const res = await this.prisma.notes.update({
+                where:{
+                    id
+                },
+                data: data_note
+            });
+            return successUpdateRepo()
+        } catch (error: any) {
+            return failedRepo(error.message)
         }
     }
 }

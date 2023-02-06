@@ -1,9 +1,10 @@
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { UserCreateUpdate } from "../prisma/dto/user.dto";
 
 const salt = bcrypt.genSaltSync(8);
 
-const users: Omit<User,'id'>[] = [
+const users: UserCreateUpdate[] = [
     {
         first_name:'admin',
         last_name:'adm',

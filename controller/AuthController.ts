@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import AuthRepository from "../repository/AuthRepository";
 import { validationResult } from "express-validator";
+import { resController } from "../config/response";
 
 const authRepository = new AuthRepository();
 
@@ -15,12 +16,7 @@ export const register = async (req:Request, res:Response)=>{
     const data = await authRepository.register(body);   
      
     
-    if(data.error){
-        console.error(data.message);
-        res.status(400).json(data)
-    }else{
-        res.status(200).json(data)
-    }
+    resController(res,data);
 }
 
 export const login = async (req:Request, res:Response) => {
@@ -33,10 +29,5 @@ export const login = async (req:Request, res:Response) => {
     const body = req.body;
     const data = await authRepository.login(body);   
      
-    if(data.error){
-        console.error(data.message);
-        res.status(400).json(data)
-    }else{
-        res.status(200).json(data)
-    }
+    resController(res,data);
 }
