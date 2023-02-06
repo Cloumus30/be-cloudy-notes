@@ -32,6 +32,14 @@ export const successUpdateRepo = (data:any = null) => {
     }
 }
 
+export const successDeleteRepo = (data:any = null) => {
+    return {
+        error: false,
+        message: '👍 🗑 Success Delete Data',
+        data
+    }
+}
+
 // Failed Response
 export const failedRepo = (message:string = '⚠️ Failed Request', code:any = 10) => {
     return {

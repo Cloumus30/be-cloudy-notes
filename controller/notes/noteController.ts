@@ -37,3 +37,11 @@ export const updateNote = async( req:Request, res:Response ) =>{
 
     resController(res, data)
 }
+
+export const deleteNote = async(req: Request, res:Response) => {
+    const body =  req.body;
+    const id =  parseInt(req.params.id);
+    const data =  await noteRepository.delete_note(id, body);
+
+    resController(res, data);
+}

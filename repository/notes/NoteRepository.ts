@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Request } from "express";
 import { noteCreate, noteUpdate} from "../../prisma/dto/note.dto";
-import { failedRepo, successGetRepo, successSaveRepo, successUpdateRepo } from "../../config/response";
+import { failedRepo, successDeleteRepo, successGetRepo, successSaveRepo, successUpdateRepo } from "../../config/response";
 
 
 class NoteRepository{
@@ -108,6 +108,30 @@ class NoteRepository{
         } catch (error: any) {
             return failedRepo(error.message)
         }
+    }
+
+    public async delete_note (id:number, body:any){
+        try {
+            const user = body.user;
+            const note = await this.prisma.notes.findFirst({
+                where:{
+                    id,
+                    user_id: user.id
+                }
+            }) 
+            if(note){
+                await this.prisma.notes.delete({
+                    where:{
+                        id: id,
+                    }
+                })
+                return successDeleteRepo();
+            }
+            return failedRepo('Note Not Found');
+        } catch (error: any) {
+            return failedRepo(error.message);
+        }
+        
     }
 }
 

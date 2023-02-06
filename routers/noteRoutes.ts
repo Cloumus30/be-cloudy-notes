@@ -1,5 +1,5 @@
 import express from 'express';
-import { detailNote, listNote, storeNote, updateNote } from '../controller/notes/noteController';
+import { deleteNote, detailNote, listNote, storeNote, updateNote } from '../controller/notes/noteController';
 import { body } from 'express-validator';
 const router = express.Router();
 
@@ -14,6 +14,7 @@ router.patch('/update/:id',
     body('title').isString(),
     body('content').isEmpty(),
     updateNote);
+router.delete('/delete/:id', deleteNote);
 
 
 export default router;
