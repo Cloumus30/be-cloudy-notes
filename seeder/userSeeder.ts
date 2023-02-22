@@ -6,8 +6,7 @@ const salt = bcrypt.genSaltSync(8);
 
 const users: UserCreateUpdate[] = [
     {
-        first_name:'admin',
-        last_name:'adm',
+        name:'admin',
         gender:'laki-laki',
         birth_date: new Date('1998-12-30'),
         email:'admin@admin.com',

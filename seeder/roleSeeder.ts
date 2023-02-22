@@ -1,6 +1,7 @@
 import { PrismaClient, Role } from "@prisma/client";
+import { RoleCreateUpdate } from "../prisma/dto/role.dto";
 
-const roles: Omit<Role,'id'>[] = [
+const roles: RoleCreateUpdate[] = [
     {
         name: 'admin',
         code: '4dmin'
