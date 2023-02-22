@@ -61,6 +61,7 @@ class NoteRepository{
             return successGetRepo(res)
         } catch (error:any) {
             return failedRepo(error.message)
+            
         }
     }
 
