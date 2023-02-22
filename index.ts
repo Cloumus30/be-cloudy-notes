@@ -28,3 +28,5 @@ app.get('/',(req: Request,res: Response)=>{
 app.listen(port, function(){
     console.log(`⚡️ Server Listening at: ${port}`);
 })
+
+module.exports = app;
