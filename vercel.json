@@ -6,11 +6,6 @@
         "use": "@now/node"
       }
     ],
-    "routes": [
-        {
-          "src": "/dist/(.*)",
-          "dest": "index.js"
-        }
-      ]
+    "rewrites": [{ "source": "/dist/(.*)", "destination": "dist/" }]
   }
   
