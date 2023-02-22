@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.paginate = void 0;
+exports.exclude = exports.paginate = void 0;
 const paginate = (query) => {
     var _a, _b;
     const perPage = (_a = parseInt(query.perPage)) !== null && _a !== void 0 ? _a : 10;
@@ -15,3 +15,10 @@ const paginate = (query) => {
     };
 };
 exports.paginate = paginate;
+const exclude = (model, keys) => {
+    for (let key of keys) {
+        delete model[key];
+    }
+    return model;
+};
+exports.exclude = exclude;

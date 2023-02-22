@@ -8,8 +8,7 @@ const router = express.Router();
 router.post('/register',
     body('email').isEmail(),
     body('password').isString(),
-    body('first_name').isString(),
-    body('last_name').isString(),
+    body('name').isString(),
     register);
 
 router.post('/login',

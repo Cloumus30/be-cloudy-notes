@@ -54,7 +54,7 @@ class NoteRepository{
                     short_desc: note.short_desc,
                     content: note.content,
                     user_id: note.user_id,
-                    user_full_name: `${note.user.first_name} ${note.user.last_name}`,
+                    user_name: note.user.name,
                     created_at : note.created_at,
                 };
             }

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.register = void 0;
 const AuthRepository_1 = __importDefault(require("../repository/AuthRepository"));
 const express_validator_1 = require("express-validator");
+const response_1 = require("../config/response");
 const authRepository = new AuthRepository_1.default();
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Check Error Validation
@@ -24,13 +25,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     const body = req.body;
     const data = yield authRepository.register(body);
-    if (data.error) {
-        console.error(data.message);
-        res.status(400).json(data);
-    }
-    else {
-        res.status(200).json(data);
-    }
+    (0, response_1.resController)(res, data);
 });
 exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,12 +36,6 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     const body = req.body;
     const data = yield authRepository.login(body);
-    if (data.error) {
-        console.error(data.message);
-        res.status(400).json(data);
-    }
-    else {
-        res.status(200).json(data);
-    }
+    (0, response_1.resController)(res, data);
 });
 exports.login = login;

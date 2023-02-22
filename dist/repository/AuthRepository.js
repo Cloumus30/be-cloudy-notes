@@ -16,6 +16,8 @@ const client_1 = require("@prisma/client");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const roleConst_1 = __importDefault(require("../const/roleConst"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const user_dto_1 = require("../prisma/dto/user.dto");
+const response_1 = require("../config/response");
 class AuthRepository {
     constructor() {
         this.prisma = new client_1.PrismaClient();
@@ -32,10 +34,7 @@ class AuthRepository {
                     }
                 });
                 if (!user) {
-                    return {
-                        error: true,
-                        message: 'User Not Found',
-                    };
+                    return (0, response_1.failedRepo)('User Not Found');
                 }
                 const authenticated = yield bcryptjs_1.default.compare(request.password, user.password);
                 if (authenticated) {
@@ -52,22 +51,12 @@ class AuthRepository {
                         },
                         role: user.role,
                     };
-                    return {
-                        error: false,
-                        message: 'success Login',
-                        data: resp,
-                    };
+                    return (0, response_1.successLogin)(resp);
                 }
-                return {
-                    error: true,
-                    message: 'User Or password incorrect',
-                };
+                return (0, response_1.failedRepo)('User or Password incorrect');
             }
             catch (error) {
-                return {
-                    error: true,
-                    message: ` ⚠️ ${error.message}`,
-                };
+                return (0, response_1.failedRepo)(error.message);
             }
         });
     }
@@ -77,6 +66,9 @@ class AuthRepository {
                 const salt = yield bcryptjs_1.default.genSalt(8);
                 const hashedPassword = yield bcryptjs_1.default.hash(request.password, salt);
                 const dataUser = {
+                    name: request.name,
+                    gender: request.gender,
+                    birth_date: new Date(request.birth_date),
                     email: request.email,
                     password: hashedPassword,
                     email_verified_at: null,
@@ -85,23 +77,17 @@ class AuthRepository {
                 };
                 const user = yield this.prisma.user.create({
                     data: dataUser,
-                    select: {
-                        email: true,
-                        role: true,
-                        password: false,
-                    }
                 });
-                return {
-                    error: false,
-                    message: 'Success Register',
-                    data: user
-                };
+                const userNoPass = (0, user_dto_1.excludeUser)(user, ['password']);
+                return (0, response_1.successSaveRepo)(userNoPass);
             }
             catch (error) {
-                return {
-                    error: true,
-                    message: ` ⚠️ ${error.message}`,
-                };
+                if (error instanceof client_1.Prisma.PrismaClientKnownRequestError) {
+                    if (error.code === 'p2002') {
+                        return (0, response_1.failedRepo)('Email Already Exists');
+                    }
+                }
+                return (0, response_1.failedRepo)(error.message);
             }
         });
     }

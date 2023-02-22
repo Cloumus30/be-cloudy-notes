@@ -16,6 +16,9 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const salt = bcryptjs_1.default.genSaltSync(8);
 const users = [
     {
+        name: 'admin',
+        gender: 'laki-laki',
+        birth_date: new Date('1998-12-30'),
         email: 'admin@admin.com',
         password: bcryptjs_1.default.hashSync('superadmin123'),
         email_verified_at: null,

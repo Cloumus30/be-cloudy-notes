@@ -31,6 +31,7 @@ const checkToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             });
         }
         req.body.role = payload.role;
+        req.body.user = user;
         next();
     }
     catch (error) {
