@@ -64,6 +64,7 @@ class AuthRepository{
                 role_code: RoleConst.MEMBER_CODE,
                 is_google:false,
             };
+            
             const user= await this.prisma.user.create({
                 data: dataUser,
             })
