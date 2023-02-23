@@ -4,12 +4,15 @@ import RoleConst from "../const/roleConst";
 import jwt from 'jsonwebtoken';
 import { UserCreateUpdate, UserGet, excludeUser } from "../prisma/dto/user.dto";
 import { failedRepo, successLogin, successSaveRepo } from "../config/response";
+import {createClient, SupabaseClient} from '@supabase/supabase-js';
 
 class AuthRepository{
     protected prisma : PrismaClient;
+    protected supabase: SupabaseClient;
 
     constructor(){
         this.prisma = new PrismaClient();
+        this.supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!);
     }
 
     public async login(request: any){
@@ -64,18 +67,32 @@ class AuthRepository{
                 role_code: RoleConst.MEMBER_CODE,
                 is_google:false,
             };
-            
-            const user= await this.prisma.user.create({
-                data: dataUser,
+            const user = await this.prisma.$transaction(async (prisma) =>{
+                try {
+                    const user = await prisma.user.create({
+                        data: dataUser,
+                    })
+    
+                    // Create Bucket
+                    const bucketName = `${user.id}-${user.name}`;
+                    const {data, error} = await this.supabase.storage.createBucket(bucketName, {public:true});
+                    if(error){
+                        throw new Error(error.message);
+                    }
+    
+                    return user;   
+                } catch (err:any) {
+                    if(err.code === 'P2002'){ 
+                        throw new Error('Email Already Exists');
+                    }
+                    throw new Error(err.message);
+                }
             })
+            
             const userNoPass: UserGet = excludeUser(user,['password']);
+
             return successSaveRepo(userNoPass)
         } catch (error: any) {
-            if(error instanceof Prisma.PrismaClientKnownRequestError){
-                if(error.code === 'p2002'){
-                    return failedRepo('Email Already Exists') 
-                }
-            }
             return failedRepo(error.message)
         }
     }
