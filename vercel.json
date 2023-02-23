@@ -15,7 +15,7 @@
     ],
     "git":{
         "deploymentEnabled": {
-            "master": "true"
+            "master": true
         }
     }
 }
