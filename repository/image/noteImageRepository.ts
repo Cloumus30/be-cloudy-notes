@@ -4,12 +4,15 @@ import { failedRepo, successLogin, successSaveRepo } from "../../config/response
 import { noteImageCreateUpdate, noteImageRootPath } from "../../prisma/dto/noteImage.dto";
 import { UploadedFile } from "express-fileupload";
 import uniqid from 'uniqid';
+import {createClient, SupabaseClient} from '@supabase/supabase-js'
 
 class NoteImageRepository{
     protected prisma : PrismaClient;
+    protected supabase;
 
     constructor(){
         this.prisma = new PrismaClient();
+        this.supabase = createClient(process.env.SUPABASE_URL! , process.env.SUPABASE_KEY!);
     }
 
     public async createNoteImage(body: any, file: UploadedFile|any){
@@ -23,8 +26,15 @@ class NoteImageRepository{
             if(!note){
                 return failedRepo('Note Not Found');
             }
+            const { data, error } = await this.supabase
+                .storage
+                .createBucket('avatars', { public: true });
+            if(error){
+                console.log(error);
+                throw new Error(error.message);
+            }
+            
             const path = `${noteImageRootPath}/${user.id}/`
-            console.log(path);
             
             const fileUpload = await this.uploadImage(file, path);
             const data_image : noteImageCreateUpdate = {
@@ -44,6 +54,7 @@ class NoteImageRepository{
 
     public async uploadImage(file: UploadedFile, path:string){
         try {
+            
             const originalName = file.name;
             const extension = originalName.match(/\.[0-9a-z]+$/i);
             const fileName = uniqid()+extension;

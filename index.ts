@@ -7,6 +7,8 @@ import {checkToken} from './middleware/authMiddleware';
 import authRoutes from './routers/authRoutes';
 import noteRoutes from './routers/noteRoutes';
 import noteImageRoutes from './routers/noteImageRoutes';
+import storageRoutes from './routers/storageRoutes';
+
 import { pagination } from "./middleware/mainMiddleware";
 
 
@@ -16,10 +18,11 @@ const app:Express = express();
 const port = process.env.APP_PORT || 3000; 
 
 app.use(express.json());
-app.use(fileUpload({
-    useTempFiles:true,
-    tempFileDir:'./public/temp',
-}));
+// app.use(fileUpload({
+//     useTempFiles:true,
+//     tempFileDir:'./public/temp',
+//     preserveExtension:true,
+// }));
 app.use(pagination);
 
 app.use('/auth', authRoutes);
@@ -28,6 +31,7 @@ app.use(checkToken);
 
 app.use('/api/note',noteRoutes);
 app.use('/api/note-image', noteImageRoutes);
+app.use('/api/storage', storageRoutes);
 
 app.get('/',(req: Request,res: Response)=>{
     return res.send('heelo world');
