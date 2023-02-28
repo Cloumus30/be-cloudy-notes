@@ -1,6 +1,7 @@
 import express, { Request, Response, Express } from "express";
 import dotenv from 'dotenv';
 import fileUpload from 'express-fileupload';
+import cors from 'cors';
 
 import {checkToken} from './middleware/authMiddleware';
 
@@ -17,6 +18,7 @@ dotenv.config();
 const app:Express = express();
 const port = process.env.APP_PORT || 3000; 
 
+app.use(cors());
 app.use(express.json());
 
 app.use(pagination);
