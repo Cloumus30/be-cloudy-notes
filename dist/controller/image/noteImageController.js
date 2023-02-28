@@ -20,7 +20,7 @@ const uploadNoteImage = (req, res) => __awaiter(void 0, void 0, void 0, function
     var _a;
     const body = req.body;
     const fileUpload = (_a = req.files) === null || _a === void 0 ? void 0 : _a.image;
-    const data = noteImageRepository.createNoteImage(body, fileUpload);
+    const data = yield noteImageRepository.createNoteImage(body, fileUpload);
     return (0, response_1.resController)(res, data);
 });
 exports.uploadNoteImage = uploadNoteImage;

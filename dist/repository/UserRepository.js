@@ -23,6 +23,7 @@ class UserRepository {
                 select: {
                     id: true,
                     email: true,
+                    name: true,
                 }
             });
             return users;

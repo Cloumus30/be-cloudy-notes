@@ -18,9 +18,11 @@ const roleConst_1 = __importDefault(require("../const/roleConst"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_dto_1 = require("../prisma/dto/user.dto");
 const response_1 = require("../config/response");
+const supabase_js_1 = require("@supabase/supabase-js");
 class AuthRepository {
     constructor() {
         this.prisma = new client_1.PrismaClient();
+        this.supabase = (0, supabase_js_1.createClient)(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
     }
     login(request) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -75,18 +77,30 @@ class AuthRepository {
                     role_code: roleConst_1.default.MEMBER_CODE,
                     is_google: false,
                 };
-                const user = yield this.prisma.user.create({
-                    data: dataUser,
-                });
+                const user = yield this.prisma.$transaction((prisma) => __awaiter(this, void 0, void 0, function* () {
+                    try {
+                        const user = yield prisma.user.create({
+                            data: dataUser,
+                        });
+                        // Create Bucket
+                        const bucketName = `${user.id}-${user.name}`;
+                        const { data, error } = yield this.supabase.storage.createBucket(bucketName, { public: true });
+                        if (error) {
+                            throw new Error(error.message);
+                        }
+                        return user;
+                    }
+                    catch (err) {
+                        if (err.code === 'P2002') {
+                            throw new Error('Email Already Exists');
+                        }
+                        throw new Error(err.message);
+                    }
+                }));
                 const userNoPass = (0, user_dto_1.excludeUser)(user, ['password']);
                 return (0, response_1.successSaveRepo)(userNoPass);
             }
             catch (error) {
-                if (error instanceof client_1.Prisma.PrismaClientKnownRequestError) {
-                    if (error.code === 'p2002') {
-                        return (0, response_1.failedRepo)('Email Already Exists');
-                    }
-                }
                 return (0, response_1.failedRepo)(error.message);
             }
         });
