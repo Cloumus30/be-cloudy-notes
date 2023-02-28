@@ -18,7 +18,7 @@ dotenv.config();
 const app:Express = express();
 const port = process.env.APP_PORT || 3000; 
 
-app.use(cors());
+app.use(cors({origin:true}));
 app.use(express.json());
 
 app.use(pagination);
