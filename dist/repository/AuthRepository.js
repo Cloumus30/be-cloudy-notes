@@ -77,26 +77,9 @@ class AuthRepository {
                     role_code: roleConst_1.default.MEMBER_CODE,
                     is_google: false,
                 };
-                const user = yield this.prisma.$transaction((prisma) => __awaiter(this, void 0, void 0, function* () {
-                    try {
-                        const user = yield prisma.user.create({
-                            data: dataUser,
-                        });
-                        // Create Bucket
-                        const bucketName = `${user.id}-${user.name}`;
-                        const { data, error } = yield this.supabase.storage.createBucket(bucketName, { public: true });
-                        if (error) {
-                            throw new Error(error.message);
-                        }
-                        return user;
-                    }
-                    catch (err) {
-                        if (err.code === 'P2002') {
-                            throw new Error('Email Already Exists');
-                        }
-                        throw new Error(err.message);
-                    }
-                }));
+                const user = yield this.prisma.user.create({
+                    data: dataUser,
+                });
                 const userNoPass = (0, user_dto_1.excludeUser)(user, ['password']);
                 return (0, response_1.successSaveRepo)(userNoPass);
             }
