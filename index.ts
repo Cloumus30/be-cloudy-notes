@@ -1,6 +1,6 @@
 import express, { Request, Response, Express } from "express";
 import dotenv from 'dotenv';
-
+import cors from 'cors';
 import {checkToken} from './middleware/authMiddleware';
 
 import authRoutes from './routers/authRoutes';
@@ -12,6 +12,7 @@ dotenv.config();
 const app:Express = express();
 const port = process.env.APP_PORT || 3000; 
 
+app.use(cors({origin:true}));
 app.use(express.json());
 app.use(pagination);
 
