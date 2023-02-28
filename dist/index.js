@@ -14,13 +14,6 @@ const mainMiddleware_1 = require("./middleware/mainMiddleware");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.APP_PORT || 3000;
-// app.use(cors({
-//     origin: "*",
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//     preflightContinue: false,
-//     optionsSuccessStatus: 204
-//   }));
-// app.options('*', cors())
 app.use(express_1.default.json());
 app.use(mainMiddleware_1.pagination);
 app.use('/auth', authRoutes_1.default);
