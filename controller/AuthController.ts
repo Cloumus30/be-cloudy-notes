@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import AuthRepository from "../repository/AuthRepository";
 import { validationResult } from "express-validator";
 import { resController } from "../config/response";
+
+// @ts-ignore  
 import { errorFormatter } from "../config/helper";
 
 const authRepository = new AuthRepository();
