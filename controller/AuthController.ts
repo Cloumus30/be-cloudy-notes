@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import AuthRepository from "../repository/AuthRepository";
-import { ValidationError, validationResult } from "express-validator";
-import { failedRepo, resController } from "../config/response";
+import { validationResult } from "express-validator";
+import { resController } from "../config/response";
 import { errorFormatter } from "../config/helper";
 
 const authRepository = new AuthRepository();
