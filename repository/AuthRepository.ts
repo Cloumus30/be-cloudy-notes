@@ -75,6 +75,9 @@ class AuthRepository{
 
             return successSaveRepo(userNoPass)
         } catch (error: any) {
+            if(error.code == 'P2002'){
+                return failedRepo('Email Sudah Terdaftar');
+            }
             return failedRepo(error.message)
         }
     }

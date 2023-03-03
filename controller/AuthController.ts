@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
 import AuthRepository from "../repository/AuthRepository";
-import { validationResult } from "express-validator";
-import { resController } from "../config/response";
+import { ValidationError, validationResult } from "express-validator";
+import { failedRepo, resController } from "../config/response";
+import { errorFormatter } from "../config/helper";
 
 const authRepository = new AuthRepository();
 
 export const register = async (req:Request, res:Response)=>{
     // Check Error Validation
-    const errors = validationResult(req);
+    const errors = validationResult(req).formatWith(errorFormatter);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      const err = errors.array()[0];
+      return resController(res,err)
     }
     
     const body = req.body;
@@ -21,9 +23,10 @@ export const register = async (req:Request, res:Response)=>{
 
 export const login = async (req:Request, res:Response) => {
     // Check Error Validation
-    const errors = validationResult(req);
+    const errors = validationResult(req).formatWith(errorFormatter);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      const err = errors.array()[0];
+      return resController(res,err)
     }
 
     const body = req.body;
