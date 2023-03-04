@@ -95,8 +95,8 @@ class NoteRepository{
 
             const data_note:noteUpdate = {
                 title: body.title,
-                short_desc: body.title,
-                content: body.title,
+                short_desc: body.short_desc || null,
+                content: body.content || null,
             }
     
             const res = await this.prisma.notes.update({
