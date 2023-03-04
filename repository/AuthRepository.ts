@@ -41,6 +41,7 @@ class AuthRepository{
                     access_key: token,
                     user: {
                         email: user.email,
+                        name: user.name,
                     },
                     role: user.role,
                 }

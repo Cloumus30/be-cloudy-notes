@@ -12,7 +12,11 @@ class NoteRepository{
 
     public async list_notes(request: Request) {
         try {
+            const user = request.body.user;
             const query = {
+                where:{
+                    user_id: user.id,
+                },
                 orderBy:{
                     id:'desc'
                 },
