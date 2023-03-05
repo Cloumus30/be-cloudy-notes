@@ -13,9 +13,14 @@ class NoteRepository{
     public async list_notes(request: Request) {
         try {
             const user = request.body.user;
+            const search = request.query.q;
             const query = {
                 where:{
                     user_id: user.id,
+                    title: {
+                        contains: search,
+                        mode: 'insensitive'
+                    }
                 },
                 orderBy:{
                     id:'desc'
