@@ -29,6 +29,8 @@ class NoteRepository{
                 select:{
                     id:true,
                     title:true,
+                    created_at:true,
+                    updated_at:true,
                     user:{
                         select:{
                             id:true,
