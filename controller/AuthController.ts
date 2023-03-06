@@ -36,3 +36,9 @@ export const login = async (req:Request, res:Response) => {
      
     resController(res,data);
 }
+
+export const checkEmail = async(req:Request, res:Response) =>{
+  const data = await authRepository.checkEmail();
+
+  resController(res,data);
+}

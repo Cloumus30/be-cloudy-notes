@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, register } from '../controller/AuthController';
+import { checkEmail, login, register } from '../controller/AuthController';
 import { body } from 'express-validator';
 import { checkToken } from '../middleware/authMiddleware';
 
@@ -15,5 +15,7 @@ router.post('/login',
     body('email').isEmail(),
     body('password').isString(),
     login)
+
+router.get('/check-email', checkEmail)
 
 export default router;

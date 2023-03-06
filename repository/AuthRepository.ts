@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { UserCreateUpdate, UserGet, excludeUser } from "../prisma/dto/user.dto";
 import { failedRepo, successLogin, successSaveRepo } from "../config/response";
 import {createClient, SupabaseClient} from '@supabase/supabase-js';
+import nodemailer from 'nodemailer';
 
 class AuthRepository{
     protected prisma : PrismaClient;
@@ -79,6 +80,41 @@ class AuthRepository{
             if(error.code == 'P2002'){
                 return failedRepo('Email Sudah Terdaftar');
             }
+            return failedRepo(error.message)
+        }
+    }
+
+    public async checkEmail(){
+        try {
+            let transporter = nodemailer.createTransport({
+                host: 'cloudias.my.id',
+                port: 465,
+                secure: true,
+                auth:{
+                    user: 'cloudy_notes@cloudias.my.id',
+                    pass: 'Cloudiasimanip30'
+                }
+            })
+
+            let info = await transporter.sendMail({
+                from: 'cloudy_notes@cloudias.my.id', // sender address
+                to: "nisfa.lailatul16@gmail.com", // list of receivers
+                subject: "Ayang", // Subject line
+                text: "Hello Sayang", // plain text body
+                html: "<b>Dik Sayang?</b>", // html body
+              });
+              console.log(info);
+              console.log("Message sent: %s", info.messageId);
+              // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+            
+              // Preview only available when sending through an Ethereal account
+              console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+              // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+            
+
+            return successSaveRepo(null);
+        } catch (error: any) {
+            console.log(error);
             return failedRepo(error.message)
         }
     }
