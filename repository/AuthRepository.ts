@@ -84,7 +84,7 @@ class AuthRepository{
         }
     }
 
-    public async checkEmail(){
+    public async sendEmail(){
         try {
             let transporter = nodemailer.createTransport({
                 host: 'cloudias.my.id',
@@ -98,7 +98,7 @@ class AuthRepository{
 
             let info = await transporter.sendMail({
                 from: 'cloudy_notes@cloudias.my.id', // sender address
-                to: "nisfa.lailatul16@gmail.com", // list of receivers
+                to: "danagames30@gmail.com", // list of receivers
                 subject: "Ayang", // Subject line
                 text: "Hello Sayang", // plain text body
                 html: "<b>Dik Sayang?</b>", // html body
