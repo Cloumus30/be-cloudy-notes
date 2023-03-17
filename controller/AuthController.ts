@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import AuthRepository from "../repository/AuthRepository";
 import { validationResult } from "express-validator";
 import { resController } from "../config/response";
+import cryptoJs from "crypto-js";
 
 // @ts-ignore  
 import { errorFormatter } from "../config/helper";
@@ -23,7 +24,17 @@ export const register = async (req:Request, res:Response)=>{
     resController(res,data);
 }
 
-export const login = async (req:Request, res:Response) => {
+/**
+ * @openapi
+ * /auth/login:
+ *   post:
+ *     description: Welcome to swagger-jsdoc!
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
+
+export const login = async (req:Request, res:Response) => {    
     // Check Error Validation
     const errors = validationResult(req).formatWith(errorFormatter);
     if (!errors.isEmpty()) {

@@ -12,8 +12,7 @@ router.post('/register',
     register);
 
 router.post('/login',
-    body('email').isEmail(),
-    body('password').isString(),
+    body('isis').isString(),
     login)
 
 router.get('/check-email', checkEmail)
