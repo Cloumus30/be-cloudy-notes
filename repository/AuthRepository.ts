@@ -65,7 +65,7 @@ class AuthRepository{
                 password: hashedPassword,
                 email_verified_at: null,
                 role_code: RoleConst.MEMBER_CODE,
-                is_google:false,
+                google_id:'-',
             };
             const user = await this.prisma.$transaction(async (prisma) =>{
                 try {
@@ -93,6 +93,14 @@ class AuthRepository{
 
             return successSaveRepo(userNoPass)
         } catch (error: any) {
+            return failedRepo(error.message)
+        }
+    }
+
+    public async login_sosmed(request:any){
+        try {
+            console.log(request);
+        } catch (error:any) {
             return failedRepo(error.message)
         }
     }

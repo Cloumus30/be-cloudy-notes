@@ -13,7 +13,7 @@ const users: UserCreateUpdate[] = [
         password: bcrypt.hashSync('superadmin123'),
         email_verified_at: null,
         role_code: '4dmin',
-        is_google:false,
+        google_id:'-',
     }
 ]
 

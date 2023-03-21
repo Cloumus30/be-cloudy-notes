@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, register } from '../controller/AuthController';
+import { login, loginSosmed, register } from '../controller/AuthController';
 import { body } from 'express-validator';
 import { checkToken } from '../middleware/authMiddleware';
 
@@ -15,5 +15,7 @@ router.post('/login',
     body('email').isEmail(),
     body('password').isString(),
     login)
+
+router.post('/login-sosmed', loginSosmed)
 
 export default router;

@@ -30,7 +30,7 @@ model User {
   password String @db.VarChar(255)
   email_verified_at String? @db.VarChar(255)
   role_code String @db.VarChar(255)
-  is_google Boolean? @default(false)
+  google_id String?
   created_at DateTime? @default(now())
   updated_at DateTime? @updatedAt
   role Role @relation(fields: [role_code], references: [code])

@@ -2,6 +2,7 @@ import express, { Request, Response, Express } from "express";
 import dotenv from 'dotenv';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
+import firebaseAdmin from 'firebase-admin';
 
 import {checkToken} from './middleware/authMiddleware';
 
