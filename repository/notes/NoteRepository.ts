@@ -12,7 +12,16 @@ class NoteRepository{
 
     public async list_notes(request: Request) {
         try {
+            const user = request.body.user;
+            const search = request.query.q;
             const query = {
+                where:{
+                    user_id: user.id,
+                    title: {
+                        contains: search,
+                        mode: 'insensitive'
+                    }
+                },
                 orderBy:{
                     id:'desc'
                 },
@@ -20,6 +29,8 @@ class NoteRepository{
                 select:{
                     id:true,
                     title:true,
+                    created_at:true,
+                    updated_at:true,
                     user:{
                         select:{
                             id:true,
@@ -95,8 +106,8 @@ class NoteRepository{
 
             const data_note:noteUpdate = {
                 title: body.title,
-                short_desc: body.title,
-                content: body.title,
+                short_desc: body.short_desc || null,
+                content: body.content || null,
             }
     
             const res = await this.prisma.notes.update({

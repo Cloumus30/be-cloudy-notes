@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { UserCreateUpdate, UserGet, excludeUser } from "../prisma/dto/user.dto";
 import { failedRepo, successLogin, successSaveRepo } from "../config/response";
 import {createClient, SupabaseClient} from '@supabase/supabase-js';
+import nodemailer from 'nodemailer';
 
 class AuthRepository{
     protected prisma : PrismaClient;
@@ -41,6 +42,7 @@ class AuthRepository{
                     access_key: token,
                     user: {
                         email: user.email,
+                        name: user.name,
                     },
                     role: user.role,
                 }
@@ -67,32 +69,52 @@ class AuthRepository{
                 role_code: RoleConst.MEMBER_CODE,
                 google_id:'-',
             };
-            const user = await this.prisma.$transaction(async (prisma) =>{
-                try {
-                    const user = await prisma.user.create({
-                        data: dataUser,
-                    })
-    
-                    // Create Bucket
-                    const bucketName = `${user.id}-${user.name}`;
-                    const {data, error} = await this.supabase.storage.createBucket(bucketName, {public:true});
-                    if(error){
-                        throw new Error(error.message);
-                    }
-    
-                    return user;   
-                } catch (err:any) {
-                    if(err.code === 'P2002'){ 
-                        throw new Error('Email Already Exists');
-                    }
-                    throw new Error(err.message);
-                }
+            const user= await this.prisma.user.create({
+                data: dataUser,
             })
             
             const userNoPass: UserGet = excludeUser(user,['password']);
 
             return successSaveRepo(userNoPass)
         } catch (error: any) {
+            if(error.code == 'P2002'){
+                return failedRepo('Email Sudah Terdaftar');
+            }
+            return failedRepo(error.message)
+        }
+    }
+
+    public async sendEmail(){
+        try {
+            let transporter = nodemailer.createTransport({
+                host: 'cloudias.my.id',
+                port: 465,
+                secure: true,
+                auth:{
+                    user: 'cloudy_notes@cloudias.my.id',
+                    pass: 'Cloudiasimanip30'
+                }
+            })
+
+            let info = await transporter.sendMail({
+                from: 'cloudy_notes@cloudias.my.id', // sender address
+                to: "danagames30@gmail.com", // list of receivers
+                subject: "Ayang", // Subject line
+                text: "Hello Sayang", // plain text body
+                html: "<b>Dik Sayang?</b>", // html body
+              });
+              console.log(info);
+              console.log("Message sent: %s", info.messageId);
+              // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+            
+              // Preview only available when sending through an Ethereal account
+              console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+              // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+            
+
+            return successSaveRepo(null);
+        } catch (error: any) {
+            console.log(error);
             return failedRepo(error.message)
         }
     }
