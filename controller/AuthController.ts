@@ -48,6 +48,12 @@ export const login = async (req:Request, res:Response) => {
     resController(res,data);
 }
 
+export const loginSosmed = async (req:Request, res:Response) =>{
+  const data = await authRepository.login_sosmed(req.body);
+
+  resController(res, data);
+}
+
 export const checkEmail = async(req:Request, res:Response) =>{
   const data = await authRepository.sendEmail();
 

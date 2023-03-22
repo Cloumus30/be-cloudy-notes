@@ -1,5 +1,5 @@
 import express from 'express';
-import { checkEmail, login, register } from '../controller/AuthController';
+import { checkEmail, login, register, loginSosmed } from '../controller/AuthController';
 import { body } from 'express-validator';
 import { checkToken } from '../middleware/authMiddleware';
 
@@ -15,6 +15,7 @@ router.post('/login',
     body('isis').isString(),
     login)
 
+router.post('/login-sosmed', loginSosmed)
 router.get('/check-email', checkEmail)
 
 export default router;
