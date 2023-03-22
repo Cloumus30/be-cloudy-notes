@@ -6,6 +6,7 @@ import { UserCreateUpdate, UserGet, excludeUser } from "../prisma/dto/user.dto";
 import { failedRepo, successLogin, successSaveRepo } from "../config/response";
 import {createClient, SupabaseClient} from '@supabase/supabase-js';
 import nodemailer from 'nodemailer';
+import { firebaseAuth } from "../config/firebaseAdminConf";
 
 class AuthRepository{
     protected prisma : PrismaClient;
@@ -30,7 +31,7 @@ class AuthRepository{
                 return failedRepo('User Not Found')
             }
     
-            const authenticated = await bcrypt.compare(request.password, user.password);
+            const authenticated = await bcrypt.compare(request.password, user.password || '-');
             if(authenticated){
                 const payload = {
                     'sub' : user.id,
@@ -119,9 +120,72 @@ class AuthRepository{
         }
     }
 
-    public async login_sosmed(request:any){
+    public async login_sosmed(body:any){
         try {
-            console.log(request);
+            const contentToken = await firebaseAuth.verifyIdToken(body.token);
+            const user = await this.prisma.user.findFirst({
+                where:{
+                    email: contentToken.email,
+                },
+                include:{
+                    role:true,
+                }
+            })
+            let resp = {}
+
+            if(user){
+
+                // Generate Token
+                const payload = {
+                    'sub' : user.id,
+                    'role' : user.role,
+                };
+                const jwtSecret = process.env.JWT_SECRET || " ";
+                const token = jwt.sign(payload, jwtSecret);
+                resp = {
+                    access_key: token,
+                    user: {
+                        email: user.email,
+                        name: user.name,
+                    },
+                    role: user.role,
+                }
+            }else{
+                const dataUser: UserCreateUpdate = {
+                    name: contentToken.name,
+                    gender: contentToken.gender,
+                    birth_date: new Date(contentToken.birth_date || null),
+                    email: contentToken.email ?? '-',
+                    password: null,
+                    email_verified_at: null,
+                    role_code: RoleConst.MEMBER_CODE,
+                    google_id: contentToken.uid,
+                };
+                const userNew= await this.prisma.user.create({
+                    data: dataUser,
+                    include:{
+                        role:true
+                    }
+                })
+
+                // Generate Token
+                const payload = {
+                    'sub' : userNew.id,
+                    'role' : userNew.role,
+                };
+                const jwtSecret = process.env.JWT_SECRET || " ";
+                const token = jwt.sign(payload, jwtSecret);
+                resp = {
+                    access_key: token,
+                    user: {
+                        email: userNew.email,
+                        name: userNew.name,
+                    },
+                    role: userNew.role,
+                }
+            }
+
+            return successLogin(resp);
         } catch (error:any) {
             return failedRepo(error.message)
         }

@@ -49,9 +49,9 @@ export const login = async (req:Request, res:Response) => {
 }
 
 export const loginSosmed = async (req:Request, res:Response) =>{
-  console.log(req.body);
+  const data = await authRepository.login_sosmed(req.body);
 
-  resController(res, {});
+  resController(res, data);
 }
 
 export const checkEmail = async(req:Request, res:Response) =>{

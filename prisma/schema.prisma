@@ -27,7 +27,7 @@ model User {
   gender String? @db.VarChar(255)
   birth_date DateTime? @db.Date
   email String @unique @db.VarChar(255)
-  password String @db.VarChar(255)
+  password String? @db.VarChar(255)
   email_verified_at String? @db.VarChar(255)
   role_code String @db.VarChar(255)
   google_id String?

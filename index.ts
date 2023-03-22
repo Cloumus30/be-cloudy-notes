@@ -1,7 +1,6 @@
 import express, { Request, Response, Express } from "express";
 import dotenv from 'dotenv';
 import cors from 'cors';
-import firebaseAdmin from 'firebase-admin';
 import {checkToken, decryptBody} from './middleware/authMiddleware';
 
 import authRoutes from './routers/authRoutes';
