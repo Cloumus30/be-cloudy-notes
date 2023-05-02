@@ -2,6 +2,7 @@ import express from 'express';
 import { checkEmail, login, register, loginSosmed } from '../controller/AuthController';
 import { body } from 'express-validator';
 import { checkToken } from '../middleware/authMiddleware';
+import { updateUser } from '../controller/UserController';
 
 const router = express.Router();
 
@@ -17,5 +18,13 @@ router.post('/login',
 
 router.post('/login-sosmed', loginSosmed)
 router.get('/check-email', checkEmail)
+
+router.use(checkToken)
+router.patch('/update-user', 
+    body('name').isString(),
+    body('gender').isString(),
+    body('birth_date').isString(),
+    body('email').isString().isEmail(),
+    updateUser)
 
 export default router;

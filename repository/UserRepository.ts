@@ -1,4 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import { UserCreateUpdate } from "../prisma/dto/user.dto";
+import { failedRepo, successSaveRepo } from "../config/response";
 
 class UserRepository{
     protected prisma : PrismaClient;
@@ -19,6 +21,23 @@ class UserRepository{
             }
         });
         return users;
+    }
+
+    public async updateUser(userId:number, request:UserCreateUpdate){
+        try {
+            const user = await this.prisma.user.update({
+                where:{
+                    id: userId
+                },
+                data: request
+            });
+            return successSaveRepo(user);   
+        } catch (error:any) {
+            if(error.code == 'P2002'){
+                return failedRepo('Email Sudah Terdaftar');
+            }
+            return failedRepo(error.message)
+        }
     }
 }
 
