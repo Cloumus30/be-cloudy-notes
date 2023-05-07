@@ -10,11 +10,11 @@ import { firebaseAuth } from "../config/firebaseAdminConf";
 
 class AuthRepository{
     protected prisma : PrismaClient;
-    protected supabase: SupabaseClient;
+    // protected supabase: SupabaseClient;
 
     constructor(){
         this.prisma = new PrismaClient();
-        this.supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!);
+        // this.supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!);
     }
 
     public async login(request: any){
