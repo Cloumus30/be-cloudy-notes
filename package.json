@@ -50,6 +50,6 @@
   },
   "engineStrict": true,
   "engines": {
-    "node": "16.*"
+    "node": ">= 16 <=18"
   }
 }
