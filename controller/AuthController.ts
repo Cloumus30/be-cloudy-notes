@@ -5,17 +5,17 @@ import { resController } from "../config/response";
 import cryptoJs from "crypto-js";
 
 // @ts-ignore  
-import { errorFormatter } from "../config/helper";
+// import { errorFormatter } from "../config/helper";
 
 const authRepository = new AuthRepository();
 
 export const register = async (req:Request, res:Response)=>{
     // Check Error Validation
-    const errors = validationResult(req).formatWith(errorFormatter);
-    if (!errors.isEmpty()) {
-      const err = errors.array()[0];
-      return resController(res,err)
-    }
+    // const errors = validationResult(req).formatWith(errorFormatter);
+    // if (!errors.isEmpty()) {
+    //   const err = errors.array()[0];
+    //   return resController(res,err)
+    // }
     
     const body = req.body;
     const data = await authRepository.register(body);   
@@ -36,11 +36,11 @@ export const register = async (req:Request, res:Response)=>{
 
 export const login = async (req:Request, res:Response) => {    
     // Check Error Validation
-    const errors = validationResult(req).formatWith(errorFormatter);
-    if (!errors.isEmpty()) {
-      const err = errors.array()[0];
-      return resController(res,err)
-    }
+    // const errors = validationResult(req).formatWith(errorFormatter);
+    // if (!errors.isEmpty()) {
+    //   const err = errors.array()[0];
+    //   return resController(res,err)
+    // }
 
     const body = req.body;
     const data = await authRepository.login(body);   
