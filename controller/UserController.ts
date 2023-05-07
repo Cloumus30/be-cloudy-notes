@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import UserRepository from "../repository/UserRepository";
 import { validationResult } from "express-validator";
-import { errorFormatter } from "../config/helper";
+// import { errorFormatter } from "../config/helper";
 import { resController } from "../config/response";
 import { UserCreateUpdate } from "../prisma/dto/user.dto";
 import bcrypt from "bcryptjs";
@@ -9,11 +9,11 @@ import bcrypt from "bcryptjs";
 const userRepo = new UserRepository();
 
 export const updateUser = async (req:Request, res:Response) =>{
-    const errors = validationResult(req).formatWith(errorFormatter);
-    if (!errors.isEmpty()) {
-      const err = errors.array()[0];
-      return resController(res,err);
-    }
+    // const errors = validationResult(req).formatWith(errorFormatter);
+    // if (!errors.isEmpty()) {
+    //   const err = errors.array()[0];
+    //   return resController(res,err);
+    // }
 
     const body = req.body;
     const user = req.body.user;
