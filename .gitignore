@@ -3,8 +3,6 @@ node_modules
 .env
 
 package-lock.json
-
-dist
 public
 
 cloudy-note-firebase.json
