@@ -25,7 +25,7 @@ app.use('/api-docs', swaggerUi.serve);
 app.get('/api-docs', swaggerUi.setup(openApiSpec));
 
 // Decrypt Body encrypted
-app.use(decryptBody);
+// app.use(decryptBody);
 
 app.use('/auth', authRoutes);
 

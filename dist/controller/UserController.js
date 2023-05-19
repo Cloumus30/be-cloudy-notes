@@ -14,17 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUser = void 0;
 const UserRepository_1 = __importDefault(require("../repository/UserRepository"));
-const express_validator_1 = require("express-validator");
-const helper_1 = require("../config/helper");
+// import { errorFormatter } from "../config/helper";
 const response_1 = require("../config/response");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const userRepo = new UserRepository_1.default();
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const errors = (0, express_validator_1.validationResult)(req).formatWith(helper_1.errorFormatter);
-    if (!errors.isEmpty()) {
-        const err = errors.array()[0];
-        return (0, response_1.resController)(res, err);
-    }
+    // const errors = validationResult(req).formatWith(errorFormatter);
+    // if (!errors.isEmpty()) {
+    //   const err = errors.array()[0];
+    //   return resController(res,err);
+    // }
     const body = req.body;
     const user = req.body.user;
     const userId = user.id;

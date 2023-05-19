@@ -24,7 +24,7 @@ const openApiSpec = (0, swagger_jsdoc_1.default)(swaggerJsOptions_1.options);
 app.use('/api-docs', swagger_ui_express_1.default.serve);
 app.get('/api-docs', swagger_ui_express_1.default.setup(openApiSpec));
 // Decrypt Body encrypted
-app.use(authMiddleware_1.decryptBody);
+// app.use(decryptBody);
 app.use('/auth', authRoutes_1.default);
 app.use(authMiddleware_1.checkToken);
 app.use('/api/note', noteRoutes_1.default);
