@@ -12,12 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = void 0;
+exports.updateUserPass = exports.updateUser = exports.getUser = void 0;
 const UserRepository_1 = __importDefault(require("../repository/UserRepository"));
 // import { errorFormatter } from "../config/helper";
 const response_1 = require("../config/response");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const userRepo = new UserRepository_1.default();
+const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.body.user;
+    if (user) {
+        const data = yield userRepo.getOneUserDetail(user.id);
+        return (0, response_1.resController)(res, data);
+    }
+});
+exports.getUser = getUser;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // const errors = validationResult(req).formatWith(errorFormatter);
     // if (!errors.isEmpty()) {
@@ -46,3 +54,19 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     return (0, response_1.resController)(res, result);
 });
 exports.updateUser = updateUser;
+const updateUserPass = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const body = req.body;
+    const user = req.body.user;
+    const userId = user.id;
+    let hashedPassword = null;
+    if (body.password) {
+        const salt = yield bcryptjs_1.default.genSalt(8);
+        hashedPassword = yield bcryptjs_1.default.hash(body.password, salt);
+    }
+    const data = {
+        password: hashedPassword,
+    };
+    const result = yield userRepo.updateUserPassword(userId, data);
+    return (0, response_1.resController)(res, result);
+});
+exports.updateUserPass = updateUserPass;

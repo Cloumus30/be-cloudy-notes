@@ -9,6 +9,7 @@ import { pagination } from "./middleware/mainMiddleware";
 import swaggerUi from "swagger-ui-express";
 import { options } from "./docs/swaggerJsOptions";
 import swaggerJsDoc from 'swagger-jsdoc';
+import profileRoutes from './routers/profileRoutes';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use('/auth', authRoutes);
 
 app.use(checkToken);
 
+app.use('/api/user', profileRoutes)
 app.use('/api/note',noteRoutes);
 
 app.get('/',(req: Request,res: Response)=>{

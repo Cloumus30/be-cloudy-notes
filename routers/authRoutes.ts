@@ -13,7 +13,8 @@ router.post('/register',
     register);
 
 router.post('/login',
-    body('isis').isString(),
+    body('email').isEmail(),
+    body('password').isString(),
     login)
 
 router.post('/login-sosmed', loginSosmed)

@@ -42,8 +42,10 @@ class AuthRepository{
                 const resp = {
                     access_key: token,
                     user: {
+                        id: user.id,
                         email: user.email,
                         name: user.name,
+                        isPassword: ((user?.password == '') || (user?.password == null)) ? false : true, 
                     },
                     role: user.role,
                 }
@@ -145,8 +147,10 @@ class AuthRepository{
                 resp = {
                     access_key: token,
                     user: {
+                        id:user.id,
                         email: user.email,
                         name: user.name,
+                        isPassword: ((user?.password == '') || (user?.password == null)) ? false : true, 
                     },
                     role: user.role,
                 }

@@ -13,6 +13,7 @@ const mainMiddleware_1 = require("./middleware/mainMiddleware");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swaggerJsOptions_1 = require("./docs/swaggerJsOptions");
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+const profileRoutes_1 = __importDefault(require("./routers/profileRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.APP_PORT || 3000;
@@ -27,6 +28,7 @@ app.get('/api-docs', swagger_ui_express_1.default.setup(openApiSpec));
 // app.use(decryptBody);
 app.use('/auth', authRoutes_1.default);
 app.use(authMiddleware_1.checkToken);
+app.use('/api/user', profileRoutes_1.default);
 app.use('/api/note', noteRoutes_1.default);
 app.get('/', (req, res) => {
     return res.send('heelo world');
