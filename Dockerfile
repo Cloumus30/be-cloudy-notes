@@ -12,6 +12,7 @@ RUN npm install
 # RUN npm ci --omit=dev
 
 COPY . .
+RUN npx prisma generate
 RUN npm run build
 
 EXPOSE ${APP_PORT}
