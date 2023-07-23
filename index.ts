@@ -27,6 +27,9 @@ app.get('/api-docs', swaggerUi.setup(openApiSpec));
 
 // Decrypt Body encrypted
 // app.use(decryptBody);
+app.get('/',(req: Request,res: Response)=>{
+    return res.send('heelo world');
+})
 
 app.use('/auth', authRoutes);
 
@@ -34,10 +37,6 @@ app.use(checkToken);
 
 app.use('/api/user', profileRoutes)
 app.use('/api/note',noteRoutes);
-
-app.get('/',(req: Request,res: Response)=>{
-    return res.send('heelo world');
-})
 
 app.listen(port, function(){
     console.log(`⚡️ Server Listening at: ${port}`);
