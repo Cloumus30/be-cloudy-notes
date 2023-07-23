@@ -14,6 +14,6 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-EXPOSE 8080
+EXPOSE ${APP_PORT}
 
 CMD [ "node", "dist/index.js" ]
