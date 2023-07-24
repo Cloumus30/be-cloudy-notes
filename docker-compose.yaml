@@ -11,6 +11,8 @@ services:
     working_dir: /usr/src/app
     volumes: 
       - ./:/use/src/app
+    ports:
+      -${APP_PORT}:${APP_PORT}
     networks:
       - cloudy-notes
 
